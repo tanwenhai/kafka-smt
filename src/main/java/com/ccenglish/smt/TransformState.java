@@ -116,16 +116,18 @@ public class TransformState<R extends ConnectRecord<R>> implements Transformatio
     R newRecord = afterDelegate.apply(record);
     if (newRecord.value() == null) {
       // Handling delete records
+      R oldRecord = beforeDelegate.apply(record);
       switch (handleDeletes) {
         case DROP:
           LOGGER.trace("Delete message {} requested to be dropped", record.key());
           return null;
         case REWRITE:
           LOGGER.trace("Delete message {} requested to be rewritten", record.key());
-          R oldRecord = beforeDelegate.apply(record);
           oldRecord = addSourceFields(addSourceFields, record, oldRecord);
           return removedDelegate.apply(oldRecord);
         default:
+          Object oldObject = oldRecord.value();
+          newRecord.headers().addStruct("__before", (Struct)oldObject);
           return newRecord;
       }
     } else {
@@ -144,6 +146,10 @@ public class TransformState<R extends ConnectRecord<R>> implements Transformatio
           String operationString = newIsDel.equals((short)1) ? "d" : "c";
           operation = Envelope.Operation.forCode(operationString);
           newRecord.headers().addString(ExtractNewRecordStateConfigDefinition.DEBEZIUM_OPERATION_HEADER_KEY, operation.code());
+          if (operation == Envelope.Operation.DELETE) {
+            newRecord = newRecord.newRecord(newRecord.topic(), newRecord.kafkaPartition(), newRecord.keySchema(), newRecord.key(), newRecord.valueSchema(), null, newRecord.timestamp(), newRecord.headers());
+            newRecord.headers().addStruct("__before", (Struct)oldObject);
+          }
         } else {
           newRecord.headers().addStruct("__before", (Struct)oldObject);
         }
