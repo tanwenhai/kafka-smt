@@ -22,3 +22,7 @@ dependencies {
     compileOnly group: 'org.apache.kafka', name: 'connect-api', version: '2.4.0'
     compileOnly group: 'org.apache.kafka', name: 'connect-transforms', version: '2.4.0'
 }
+
+compileJava {
+  options.encoding = "UTF-8"
+}
