@@ -137,7 +137,7 @@ public class TransformState<R extends ConnectRecord<R>> implements Transformatio
 
       Object oldObject = oldRecord.value();
       Object newObject = newRecord.value();
-      if (oldObject instanceof Struct && newObject instanceof Struct) {
+      if (oldObject instanceof Struct && newObject instanceof Struct && ((Struct)oldObject).get("is_del") != null) {
         Short oldIsDel = ((Struct)oldObject).getInt16("is_del");
         Short newIsDel = ((Struct)newObject).getInt16("is_del");
         if (!Objects.equals(oldIsDel, newIsDel)) {
