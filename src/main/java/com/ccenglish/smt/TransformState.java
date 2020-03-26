@@ -153,9 +153,9 @@ public class TransformState<R extends ConnectRecord<R>> implements Transformatio
         } else {
           newRecord.headers().addStruct("__before", (Struct)oldObject);
         }
-      } else if (newObject instanceof Struct &&  ((Struct)newObject).schema().field("is_del") != null) {
+      } else if (newObject instanceof Struct && ((Struct)newObject).schema().field("is_del") != null) {
         Short isDel = ((Struct)newObject).getInt16("is_del");
-        if (Objects.equals(isDel, 1)) {
+        if (Objects.equals(isDel, (short)1)) {
           // 新增的记录是软删除
           newRecord.headers().addStruct("__before", (Struct)newObject);
           newRecord.headers().remove(ExtractNewRecordStateConfigDefinition.DEBEZIUM_OPERATION_HEADER_KEY);
