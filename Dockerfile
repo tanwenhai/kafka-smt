@@ -22,4 +22,4 @@ RUN docker-maven-download debezium mongodb "$DEBEZIUM_VERSION" "$MONGODB_MD5" &&
     docker-maven-download debezium-additional incubator db2 "$DEBEZIUM_VERSION" "$DB2_MD5" && \
     docker-maven-download debezium-optional scripting "$DEBEZIUM_VERSION" "$SCRIPTING_MD5"
 
-COPY build/libs/*.jar /kafka/connect/debezium-connector-mysql
+COPY build/libs/smt-*.jar /kafka/connect/debezium-connector-mysql
