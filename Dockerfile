@@ -14,12 +14,15 @@ ENV DEBEZIUM_VERSION="1.3.0.Final" \
     DB2_MD5=6538b503aac8951ad340530ae57444ac \
     SCRIPTING_MD5=7169d7ad4a2b97e641de4ffbe673cf3a
 
+
 RUN docker-maven-download debezium mongodb "$DEBEZIUM_VERSION" "$MONGODB_MD5" && \
     docker-maven-download debezium mysql "$DEBEZIUM_VERSION" "$MYSQL_MD5" && \
     docker-maven-download debezium postgres "$DEBEZIUM_VERSION" "$POSTGRES_MD5" && \
     docker-maven-download debezium sqlserver "$DEBEZIUM_VERSION" "$SQLSERVER_MD5" && \
     docker-maven-download debezium-additional incubator oracle "$DEBEZIUM_VERSION" "$ORACLE_MD5" && \
     docker-maven-download debezium-additional incubator db2 "$DEBEZIUM_VERSION" "$DB2_MD5" && \
-    docker-maven-download debezium-optional scripting "$DEBEZIUM_VERSION" "$SCRIPTING_MD5"
+    docker-maven-download debezium-optional scripting "$DEBEZIUM_VERSION" "$SCRIPTING_MD5" && \
+    curl -O https://packages.confluent.io/maven/io/confluent/kafka-connect-elasticsearch/10.0.0/kafka-connect-elasticsearch-10.0.0.jar && \
+    mv kafka-connect-elasticsearch-10.0.0.jar /kafka/connect/debezium-connector-mysql
 
 COPY build/libs/smt-*.jar /kafka/connect/debezium-connector-mysql
