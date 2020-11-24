@@ -25,4 +25,4 @@ RUN docker-maven-download debezium mongodb "$DEBEZIUM_VERSION" "$MONGODB_MD5" &&
     curl -O https://packages.confluent.io/maven/io/confluent/kafka-connect-elasticsearch/10.0.0/kafka-connect-elasticsearch-10.0.0.jar && \
     mv kafka-connect-elasticsearch-10.0.0.jar /kafka/connect/debezium-connector-mysql
 
-COPY build/libs/smt-*.jar /kafka/connect/debezium-connector-mysql
+COPY build/libs/*.jar /kafka/connect/debezium-connector-mysql
